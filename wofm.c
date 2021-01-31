@@ -146,9 +146,9 @@ void Combat(Player *Hero, int opp_skill, int opp_stamina, Flags F)
 	  if(Hero->stamina <= 2)
 	    {
 	      if(testLuck(Hero))
-		dmg--;
-	      else
 		dmg++;
+	      else
+		dmg--;
 	    }
 	  dStamina(Hero, dmg);
 	}
