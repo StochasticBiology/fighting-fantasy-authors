@@ -205,7 +205,7 @@ int main(void)
   
   // initialise counter and stager of player deaths
   dead = 0;
-  for(i = 0; i < 100; i++)
+  for(i = 0; i < NSTAGE; i++)
     deadhist[i] = 0;
   
   // run many instances of the simulation
