@@ -70,12 +70,14 @@ int testStamina(Player Hero)
 void dLuck(Player *Hero, int d)
 {
   if(Hero->luck + d <= Hero->i_luck) Hero->luck += d;
+  else Hero->luck = Hero->i_luck;
 }
 
 // change skill by "d" (positive or negative) unless this takes us above initial score
 void dSkill(Player *Hero, int d)
 {
   if(Hero->skill + d <= Hero->i_skill) Hero->skill += d;
+  else Hero->skill = Hero->i_skill;
 }
 
 // change stamina by "d" (positive or negative) unless this takes us above initial score
@@ -83,6 +85,7 @@ void dSkill(Player *Hero, int d)
 void dStamina(Player *Hero, int d)
 {
   if(Hero->stamina + d <= Hero->i_stamina) Hero->stamina += d;
+  else Hero->stamina = Hero->i_stamina;
   if(Hero->stamina <= 0)   // we will die here without potion
     {
       // if we have potion, use and decrement
@@ -152,7 +155,7 @@ void Combat(Player *Hero, int opp_skill, int opp_stamina, Flags F)
       if(hero_as > opp_as)
 	{
 	  // try using luck if we want to and have an expectation of doing better
-	  if(F.useluck && Hero->luck >= 6)
+	  if(F.useluck) && Hero->luck >= 6)
 	    {
 	      if(testLuck(Hero))
 		opp_stamina -= 4;
