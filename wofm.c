@@ -1,4 +1,8 @@
 // simulation of champskees' best path through The Warlock of Firetop Mountain
+// path taken from https://fightingfantazine.proboards.com/thread/56/1-warlock-firetop-mountain-solution
+// only change (I think!) is that where champskees fights the iron cyclops and minotaur, they have "(use up to 3 luck points to deal extra damage, shield to reduce damage taken)."
+// but this can be counterproductive if luck < 6 because then the expected damage dealt drops below 2 -- so we only use luck if it's >= 6
+// we also always test luck if we're about to receive a killing blow in combat
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,8 +14,9 @@
 // random number call
 #define RND drand48()
 
-// housekeeping constants -- length of strings describing book stages, and number of simulations to run
+// housekeeping constants -- length of strings describing book stages, number of stages, and number of simulations to run
 #define LEN 100
+#define NSTAGE 11
 #define NSIM 1e5
 
 // structure storing player info
@@ -181,9 +186,9 @@ int main(void)
   int i, j;
   int dead;
   int tmp;
-  int deadhist[100];
+  int deadhist[NSTAGE];
   int dstage;
-  char stagenames[11*LEN];
+  char stagenames[NSTAGE*LEN];
 
   // populate list of stage names so we can see where we die
   sprintf(&stagenames[LEN*0], "guard");
@@ -346,12 +351,12 @@ int main(void)
       
       // 258 (get key 111)
       dLuck(&Hero, 2);
-      // 54-308-160-267-246-329-299-359-385-297-150-222-85-106 (food opp; dragon)
+      // 54-308-160-267-246-329-299-359-385-297-150-222-85-106 (food opp; dragon -- use di maggio spell)
       Eat(&Hero, 4); 
       // 126-26-371 (food opp)
       Eat(&Hero, 4); 
       dLuck(&Hero, 3); 
-      // 274 (warlock)-356-358-105-382-396-242-139-321-169-400
+      // 274 (warlock)-356-358-105-382-396-242-139 (use keys 111+111+99)-321-169-400 (end)
 
       // if we died, record that we did, and where
       if(dstage != -1)
@@ -361,7 +366,7 @@ int main(void)
 
   // summarise death statistics
   printf("Overall success probability %.3f\n", 1.- (double)dead / NSIM);
-  for(i = 0; i < 100; i++)
+  for(i = 0; i < NSTAGE; i++)
     {
       if(deadhist[i])
 	printf("Stage %i (%s): %.2f%% simulations died (%.2f%% of all deaths)\n", i, &stagenames[i*LEN], (double)deadhist[i]/NSIM*100., (double)deadhist[i]/dead*100.);
