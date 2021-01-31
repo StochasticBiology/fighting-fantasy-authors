@@ -133,7 +133,9 @@ void Combat(Player *Hero, int opp_skill, int opp_stamina, Flags F)
 	    dmg = -1;
 	  else
 	    dmg = -2;
-	  if(Hero->stamina == 2)
+	  // if we've lost this round and our stamina is <= 2, test luck regardless of luck (alternative is certain death) to try and mitigate damage
+	  // this would normally be only worth it for stamina exactly 2, but there's a chance our shield plus a luck test will save us even at stamina 1
+	  if(Hero->stamina <= 2)
 	    {
 	      if(testLuck(Hero))
 		dmg--;
