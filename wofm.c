@@ -10,6 +10,7 @@
 // verbose flags for extended output
 #define VERBOSE 0                // outputs player status throughout
 #define VERBOSE_COMBAT 0         // outputs combat progress
+#define CHAMPSKEES 0             // attempt to replicate champskees
 
 // random number call
 #define RND drand48()
@@ -17,7 +18,7 @@
 // housekeeping constants -- length of strings describing book stages, number of stages, and number of simulations to run
 #define LEN 100
 #define NSTAGE 11
-#define NSIM 1e5
+#define NSIM 5e5
 
 // structure storing player info
 typedef struct {
@@ -25,7 +26,7 @@ typedef struct {
   int luck, skill, stamina;        // current stats
   int food;                        // current provisions
   int potion;                      // current doses of strength potion
-  int died;                        // whether the player has dies
+  int died;                        // whether the player has died
 } Player;
 
 // structure storing adventure-specific flags
@@ -143,7 +144,7 @@ void Combat(Player *Hero, int opp_skill, int opp_stamina, Flags F)
 	    dmg = -2;
 	  // if we've lost this round and our stamina is <= 2, test luck regardless of luck (alternative is certain death) to try and mitigate damage
 	  // this would normally be only worth it for stamina exactly 2, but there's a chance our shield plus a luck test will save us even at stamina 1
-	  if(Hero->stamina <= 2)
+	  if(Hero->stamina <= (CHAMPSKEES ? 0 : 2))
 	    {
 	      if(testLuck(Hero))
 		dmg++;
@@ -155,7 +156,7 @@ void Combat(Player *Hero, int opp_skill, int opp_stamina, Flags F)
       if(hero_as > opp_as)
 	{
 	  // try using luck if we want to and have an expectation of doing better
-	  if(F.useluck) && Hero->luck >= 6)
+	  if(F.useluck && Hero->luck >= (CHAMPSKEES ? 0 : 6))
 	    {
 	      if(testLuck(Hero))
 		opp_stamina -= 4;
@@ -301,7 +302,7 @@ int main(void)
 	    }
 	  // if stamina is max or we're out of food, punt across
 	  // 386-55
-	  if((tmp = D6()+D6()) <= Hero.luck && tmp <= Hero.stamina)
+	  if((CHAMPSKEES && (D6()+D6() <= Hero.luck && D6()+D6() <= Hero.stamina)) || (!CHAMPSKEES && (tmp = D6()+D6()) <= Hero.luck && tmp <= Hero.stamina))
 	    {
 	      F.northbank = 1;
 	    }
