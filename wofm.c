@@ -61,19 +61,19 @@ int testStamina(Player Hero)
   return 0;
 }
 
-// change luck by "d" (positive or negative) unless this takes luck above initial score
+// change luck by "d" (positive or negative) unless this takes us above initial score
 void dLuck(Player *Hero, int d)
 {
   if(Hero->luck + d <= Hero->i_luck) Hero->luck += d;
 }
 
-// change skill by "d" (positive or negative) unless this takes luck above initial score
+// change skill by "d" (positive or negative) unless this takes us above initial score
 void dSkill(Player *Hero, int d)
 {
   if(Hero->skill + d <= Hero->i_skill) Hero->skill += d;
 }
 
-// change stamina by "d" (positive or negative) unless this takes luck above initial score
+// change stamina by "d" (positive or negative) unless this takes us above initial score
 // if this takes stamina below zero, either use potion or die
 void dStamina(Player *Hero, int d)
 {
