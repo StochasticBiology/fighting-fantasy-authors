@@ -31,10 +31,16 @@ plot.product.probability <- ggplot(product.df, aes(x=reorder(authors,top.product
 # second plot is the individual book stats. these are plotted both as bar plots and individual datapoints, with labels giving the number of each book (using ggrepel for clarity)
 plot.individual.probability <- ggplot(df, aes(x=reorder(Author,Top, FUN=median), y=Top)) + geom_boxplot(outlier.shape=NA) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(x="Author(s)", y = "Individual book success probabilities\nas % (with top stats)") + geom_point() + geom_text_repel(aes(label=Number), color="gray", max.overlaps=20) + theme(axis.text.x = element_text(size=14), axis.text.y = element_text(size=14), axis.title = element_text(size=16))
 
+# third plot is this restyled for James! :-)
+plot.individual.probability.james <- ggplot(df, aes(x=reorder(Author,Top, FUN=mean), y=Top)) + geom_boxplot(outlier.shape=NA) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(x="Author(s)", y = "Individual book success probabilities\nas % (with top stats)") + geom_point() + geom_text_repel(aes(label=Number), color="gray", max.overlaps=20) + theme(axis.text.x = element_text(size=14), axis.text.y = element_text(size=14), axis.title = element_text(size=16)) + coord_flip()
+
 # store these plots to files
 pdf(file="plot-product-probability.pdf")
 plot.product.probability
 dev.off()
 pdf(file="plot-individual-probability.pdf", width=10)
 plot.individual.probability
+dev.off()
+pdf(file="plot-individual-probability-james.pdf")
+plot.individual.probability.james
 dev.off()
